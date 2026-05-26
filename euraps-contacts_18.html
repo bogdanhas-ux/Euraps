@@ -10,12 +10,13 @@
 <style>
 * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 img { -webkit-user-select:none; -webkit-touch-callout:none; user-select:none; pointer-events:none; }
+button, input, select { pointer-events:auto; }
 :root { --navy:#0d1f4e; --navy-light:#2a4a9f; --gold:#c9a84c; --white:#fff; --bg:#f0f4ff; --border:#c5d0e8; --text:#0d1f4e; --muted:#6b7fa8; --radius:10px; --shadow:0 4px 24px rgba(13,31,78,0.13); }
 html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; color:var(--text); }
 .page { display:flex; flex-direction:column; height:100vh; overflow:hidden; }
 
 .top-bar { flex:0 0 96px; background:#fff; border-bottom:2px solid var(--navy); display:flex; align-items:center; justify-content:center; padding:20px 20px 8px 20px; }
-.top-bar img { height:56px; width:auto; object-fit:contain; margin-top:8px; }
+.top-bar img { height:62px; width:auto; object-fit:contain; margin-top:8px; }
 
 .euraps-banner { flex:0 0 115px; display:flex; align-items:stretch; overflow:hidden; border-bottom:2px solid var(--navy); }
 .banner-left { width:42%; background:#fff; display:flex; align-items:center; padding:0 28px; }
@@ -53,8 +54,8 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 .btn-submit { height:44px; background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%); color:var(--white); border:none; border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(13,31,78,0.3); }
 .btn-submit:active { transform:scale(0.98); }
 
-.bottom-bar { flex:0 0 102px; background:#fff; border-top:2px solid var(--navy); padding:0px 20px 34px 20px; display:flex; align-items:center; justify-content:center; gap:16px; }
-.bottom-bar img { height:34px; width:auto; max-width:100%; object-fit:contain; }
+.bottom-bar { flex:0 0 102px; background:#fff; border-top:2px solid var(--navy); padding:14px 20px 16px 20px; display:flex; align-items:center; justify-content:center; gap:16px; }
+.bottom-bar img { height:40px; width:auto; max-width:100%; object-fit:contain; }
 .bottom-counter { font-size:11px; color:var(--muted); white-space:nowrap; padding-left:10px; }
 .bottom-counter strong { color:var(--navy); font-size:15px; }
 
