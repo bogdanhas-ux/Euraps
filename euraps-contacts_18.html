@@ -50,7 +50,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 .gdpr-check svg { width:13px; height:13px; }
 .gdpr-text { font-size:10px; color:var(--muted); line-height:1.5; }
 .gdpr-text strong { color:var(--navy); }
-.btn-submit { height:44px; background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%); color:var(--white); border:none; border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(13,31,78,0.3); }
+.btn-submit { height:52px; background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%); color:var(--white); border:none; border-radius:var(--radius); font-size:17px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(13,31,78,0.3); -webkit-appearance:none; touch-action:manipulation; }
 .btn-submit:active { transform:scale(0.98); }
 
 .bottom-bar { flex:0 0 102px; background:#fff; border-top:2px solid var(--navy); padding:14px 20px 16px 20px; display:flex; align-items:center; justify-content:center; gap:16px; }
@@ -142,7 +142,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
     <div class="success-circle"><svg viewBox="0 0 42 42" fill="none"><polyline points="8,22 17,31 34,13" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="success-name" id="success-name">saved!</div>
     <div class="success-tagline">Thank you for<br><span>connecting!</span></div>
-    <div class="success-msg">Data sent to Google Sheets.<br>We look forward to staying in touch.</div>
+    <div class="success-msg">We look forward to staying in touch.</div>
     <button class="btn-next" onclick="nextContact()">Next Contact &#8250;</button>
   </div>
 </div>
@@ -214,7 +214,15 @@ function showErr(f,e){document.getElementById(f).classList.add('error');document
 function clearErr(f,e){document.getElementById(f).classList.remove('error');document.getElementById(e).style.display='none';}
 function validate(){var ok=true;var name=document.getElementById('name').value.trim();if(!name){showErr('name','name-err');ok=false;}else{clearErr('name','name-err');}var country=document.getElementById('country-value').value.trim();if(!country){showErr('country-input','country-err');ok=false;}else{clearErr('country-input','country-err');}var phone=document.getElementById('phone-number').value.trim();if(!phone){showErr('phone-number','phone-err');ok=false;}else{clearErr('phone-number','phone-err');}var email=document.getElementById('email').value.trim();if(!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)){showErr('email','email-err');ok=false;}else{clearErr('email','email-err');}return ok;}
 function sendToSheet(contact){var xhr=new XMLHttpRequest();xhr.open('POST',SHEET_URL,true);xhr.setRequestHeader('Content-Type','text/plain');xhr.send(JSON.stringify(contact));}
-function submitForm(){if(!validate())return;var contact={name:document.getElementById('name').value.trim(),specialty:document.getElementById('specialty').value.trim(),country:document.getElementById('country-value').value.trim(),phone:document.getElementById('phone-prefix').value+' '+document.getElementById('phone-number').value.trim(),email:document.getElementById('email').value.trim(),gdpr:'Yes',timestamp:new Date().toLocaleString('en-GB')};contacts.push(contact);realCount++;if(document.getElementById('counter'))document.getElementById('counter').textContent=FAKE_OFFSET+realCount;document.getElementById('success-name').textContent=contact.name+' saved!';sendToSheet(contact);document.getElementById('success-overlay').classList.add('show');startFireworks();}
+function submitForm(){
+  var name=document.getElementById('name').value.trim();
+  var country=document.getElementById('country-value').value.trim();
+  var phone=document.getElementById('phone-number').value.trim();
+  var email=document.getElementById('email').value.trim();
+  if(!name){alert('Please enter Full Name');return;}
+  if(!country){alert('Please select Country');return;}
+  if(!phone){alert('Please enter Phone');return;}
+  if(!email||email.indexOf('@')<0){alert('Please enter valid Email');return;}var contact={name:document.getElementById('name').value.trim(),specialty:document.getElementById('specialty').value.trim(),country:document.getElementById('country-value').value.trim(),phone:document.getElementById('phone-prefix').value+' '+document.getElementById('phone-number').value.trim(),email:document.getElementById('email').value.trim(),gdpr:'Yes',timestamp:new Date().toLocaleString('en-GB')};contacts.push(contact);realCount++;if(document.getElementById('counter'))document.getElementById('counter').textContent=FAKE_OFFSET+realCount;document.getElementById('success-name').textContent=contact.name+' saved!';sendToSheet(contact);document.getElementById('success-overlay').classList.add('show');startFireworks();}
 function nextContact(){stopFireworks();document.getElementById('success-overlay').classList.remove('show');['name','specialty','phone-number','email'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('country-input').value='';document.getElementById('country-value').value='';selectedCountry=null;}
 
 </script>
