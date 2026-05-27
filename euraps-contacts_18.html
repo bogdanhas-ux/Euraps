@@ -23,7 +23,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 .banner-right::before { content:''; position:absolute; left:-20px; top:50%; transform:translateY(-50%); width:100px; height:100px; border-radius:50%; border:2px solid rgba(255,255,255,0.12); }
 .banner-right::after { content:''; position:absolute; left:40px; top:50%; transform:translateY(-50%); width:65px; height:65px; border-radius:50%; border:2px solid rgba(201,168,76,0.25); }
 
-.form-area { flex:1 1 0; overflow:visible; display:flex; flex-direction:column; padding:0 20px; background:var(--bg); }
+.form-area { flex:1 1 0; overflow-y:scroll; -webkit-overflow-scrolling:touch; display:flex; flex-direction:column; padding:0 20px; background:var(--bg); }
 .form-inner { height:100%; display:flex; flex-direction:column; justify-content:center; gap:12px; max-width:900px; width:100%; margin:0 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 
 .field { display:flex; flex-direction:column; gap:3px; }
@@ -37,10 +37,10 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 .fields-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; }
 .field-full { grid-column:1/-1; }
 .country-wrap { position:relative; }
-.country-dropdown { display:none; position:absolute; top:46px; left:0; right:0; background:var(--white); border:1.5px solid var(--navy-light); border-radius:var(--radius); max-height:200px; overflow-y:auto; z-index:999; box-shadow:var(--shadow); }
+.country-dropdown { display:none; }
 .country-dropdown.open { display:block; }
-.country-option { padding:10px 12px; font-size:14px; color:var(--text); cursor:pointer; border-bottom:1px solid #f0f4ff; display:flex; align-items:center; gap:8px; }
-.country-option:hover { background:#f0f4ff; }
+.country-option { padding:12px 16px; font-size:15px; color:var(--text); cursor:pointer; border-bottom:1px solid #f0f4ff; display:flex; align-items:center; gap:10px; }
+.country-option:active { background:#f0f4ff; }
 .country-chevron { position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
 .phone-wrap { display:flex; gap:8px; }
 .prefix-select { width:100px; flex-shrink:0; height:38px; border:1.5px solid var(--border); border-radius:var(--radius); padding:0 6px; font-size:12px; color:var(--text); background:var(--white); outline:none; -webkit-appearance:none; cursor:pointer; }
@@ -70,6 +70,18 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 .success-tagline span { color:var(--gold); }
 .success-msg { font-size:12px; color:var(--muted); line-height:1.6; margin-bottom:24px; }
 .btn-next { background:linear-gradient(135deg,var(--navy),var(--navy-light)); color:var(--white); border:none; border-radius:12px; padding:14px 32px; font-size:15px; font-weight:700; cursor:pointer; width:100%; }
+
+/* Country Modal */
+.country-modal-overlay { display:none; position:fixed; inset:0; background:rgba(8,16,48,0.7); z-index:9999; align-items:flex-end; justify-content:center; }
+.country-modal-overlay.open { display:flex; }
+.country-modal { background:#fff; border-radius:20px 20px 0 0; width:100%; max-height:75vh; display:flex; flex-direction:column; animation:slideUp 0.25s ease; }
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.country-modal-header { padding:16px 20px 12px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #e8edf8; flex-shrink:0; }
+.country-modal-header h3 { font-size:16px; font-weight:700; color:#0d1f4e; }
+.country-modal-close { width:32px; height:32px; border-radius:50%; background:#f0f4ff; border:none; font-size:18px; color:#6b7fa8; cursor:pointer; display:flex; align-items:center; justify-content:center; -webkit-appearance:none; }
+.country-modal-search { padding:10px 16px; flex-shrink:0; border-bottom:1px solid #e8edf8; }
+.country-modal-search input { width:100%; height:40px; border:1.5px solid #c5d0e8; border-radius:10px; padding:0 12px; font-size:15px; outline:none; -webkit-appearance:none; }
+.country-modal-list { overflow-y:scroll; -webkit-overflow-scrolling:touch; flex:1; }
 </style>
 </head>
 <body>
@@ -100,9 +112,11 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
         <div class="field">
           <label>Country <span class="req">*</span></label>
           <div class="country-wrap">
-            <input type="text" id="country-input" class="input-base" placeholder="Search country..." autocomplete="off" oninput="filterCountries()" onclick="openDropdown()">
-            <span class="country-chevron">&#9660;</span>
-            <div class="country-dropdown" id="country-dropdown"></div>
+            <div id="country-display" onclick="openCountryModal()" style="width:100%;height:42px;border:1.5px solid var(--border);border-radius:var(--radius);padding:0 12px;font-size:14px;color:var(--text);background:var(--white);display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+              <span id="country-display-text" style="color:#a0aec0;">Search country...</span>
+              <span style="color:var(--muted);">&#9660;</span>
+            </div>
+            <input type="hidden" id="country-input" value="">
           </div>
           <input type="hidden" id="country-value">
           <div class="field-error" id="country-err">Please select a country.</div>
@@ -343,8 +357,8 @@ var COUNTRIES=[
 
 var contacts=[],selectedCountry=null;
 function renderDropdown(list){var dd=document.getElementById('country-dropdown');dd.innerHTML='';list.forEach(function(c){var div=document.createElement('div');div.className='country-option';div.innerHTML='<span>'+c.flag+'</span><span>'+c.name+'</span>';div.onclick=(function(c){return function(){selectCountry(c);};})(c);dd.appendChild(div);});}
-function openDropdown(){renderDropdown(COUNTRIES);document.getElementById('country-dropdown').classList.add('open');}
-function filterCountries(){var q=document.getElementById('country-input').value.toLowerCase();renderDropdown(COUNTRIES.filter(function(c){return c.name.toLowerCase().indexOf(q)>=0;}));document.getElementById('country-dropdown').classList.add('open');selectedCountry=null;document.getElementById('country-value').value='';}
+function openDropdown(){ openCountryModal(); }
+function filterCountries(){ openCountryModal(); }
 function selectCountry(c){selectedCountry=c;document.getElementById('country-input').value=c.flag+'  '+c.name;document.getElementById('country-value').value=c.name;document.getElementById('country-dropdown').classList.remove('open');if(c.prefix){var sel=document.getElementById('phone-prefix');for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===c.prefix){sel.value=c.prefix;break;}}}document.getElementById('country-input').classList.remove('error');document.getElementById('country-err').style.display='none';checkOrderBtn();}
 document.addEventListener('click',function(e){if(!e.target.closest('.country-wrap'))document.getElementById('country-dropdown').classList.remove('open');});
 function showErr(f,e){document.getElementById(f).classList.add('error');document.getElementById(e).style.display='block';}
@@ -381,7 +395,7 @@ function submitForm(){
   document.getElementById('success-overlay').classList.add('show');
   startFireworks();
 }
-function nextContact(){stopFireworks();document.getElementById('success-overlay').classList.remove('show');document.getElementById('name').value='';document.getElementById('specialty').value='';document.getElementById('phone-number').value='';document.getElementById('email').value='';document.getElementById('country-input').value='';document.getElementById('country-value').value='';document.getElementById('phone-prefix').value='+40';selectedCountry=null;checkOrderBtn();}
+function nextContact(){stopFireworks();document.getElementById('success-overlay').classList.remove('show');document.getElementById('name').value='';document.getElementById('specialty').value='';document.getElementById('phone-number').value='';document.getElementById('email').value='';document.getElementById('country-input').value='';document.getElementById('country-value').value='';document.getElementById('country-display-text').textContent='Search country...';document.getElementById('country-display-text').style.color='#a0aec0';document.getElementById('phone-prefix').value='+40';selectedCountry=null;checkOrderBtn();}
 
 
 var SHEET_URL2 = 'https://script.google.com/macros/s/AKfycbxI5Tyj1F_zc9i4WV-FHy2kzzlG6CVymAUz1fv0a5CNqfmZfoheNnwYON1AUjdHBm4/exec';
@@ -674,6 +688,73 @@ function closeOrderSuccess() {
   orderItems = [];
 }
 
+
+function openCountryModal() {
+  document.getElementById('country-modal-search').value = '';
+  renderCountryModalList(COUNTRIES);
+  document.getElementById('country-modal-overlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('country-modal-search').focus(); }, 300);
+}
+
+function closeCountryModal(e) {
+  if (!e || e.target === document.getElementById('country-modal-overlay')) {
+    document.getElementById('country-modal-overlay').classList.remove('open');
+  }
+}
+
+function filterCountryModal() {
+  var q = document.getElementById('country-modal-search').value.toLowerCase();
+  renderCountryModalList(COUNTRIES.filter(function(c){ return c.name.toLowerCase().indexOf(q) >= 0; }));
+}
+
+function renderCountryModalList(list) {
+  var container = document.getElementById('country-modal-list');
+  var rows = '';
+  for (var i = 0; i < list.length; i++) {
+    var c = list[i];
+    var globalIdx = COUNTRIES.indexOf(c);
+    rows += '<div class="country-option" onclick="selectCountryByIndex(' + globalIdx + ')">';
+    rows += '<span style="font-size:20px;">' + c.flag + '</span>';
+    rows += '<span>' + c.name + '</span>';
+    if (c.prefix) rows += '<span style="margin-left:auto;color:#9aa5c0;font-size:12px;">' + c.prefix + '</span>';
+    rows += '</div>';
+  }
+  container.innerHTML = rows;
+}
+
+function selectCountryByIndex(idx) { var c = COUNTRIES[idx]; if(c) selectCountryFromModal(c.name, c.prefix, c.flag); }
+
+function selectCountryFromModal(name, prefix, flag) {
+  selectedCountry = { name: name, prefix: prefix, flag: flag };
+  document.getElementById('country-value').value = name;
+  document.getElementById('country-display-text').textContent = flag + '  ' + name;
+  document.getElementById('country-display-text').style.color = '#0d1f4e';
+  if (prefix) {
+    var sel = document.getElementById('phone-prefix');
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === prefix) { sel.value = prefix; break; }
+    }
+  }
+  document.getElementById('country-input').classList.remove('error');
+  document.getElementById('country-err').style.display = 'none';
+  closeCountryModal();
+  checkOrderBtn();
+}
+
 </script>
+
+<!-- Country Modal -->
+<div class="country-modal-overlay" id="country-modal-overlay" onclick="closeCountryModal(event)">
+  <div class="country-modal" onclick="event.stopPropagation()">
+    <div class="country-modal-header">
+      <h3>Select Country</h3>
+      <button class="country-modal-close" onclick="closeCountryModal()">&#10005;</button>
+    </div>
+    <div class="country-modal-search">
+      <input type="text" id="country-modal-search" placeholder="Search..." oninput="filterCountryModal()" autocomplete="off">
+    </div>
+    <div class="country-modal-list" id="country-modal-list"></div>
+  </div>
+</div>
 </body>
 </html>
