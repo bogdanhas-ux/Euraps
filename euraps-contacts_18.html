@@ -150,7 +150,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 
   <!-- Header -->
   <div style="background:linear-gradient(135deg,#0d1f4e,#2a4a9f);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
-    <button onclick="showStep1()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;-webkit-appearance:none;">&#8592; Back</button>
+    <button onclick="showStep1()" style="background:#fff;border:none;color:#0d1f4e;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;-webkit-appearance:none;box-shadow:0 2px 8px rgba(0,0,0,0.15);">&#8592; Back</button>
     <div style="font-size:16px;font-weight:800;color:#fff;">I want to order</div>
     <div style="width:80px;"></div>
   </div>
@@ -224,14 +224,52 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 </div>
 
 <!-- ORDER SUCCESS -->
-<div id="order-success" style="display:none;position:fixed;inset:0;background:rgba(8,16,48,0.93);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:24px;padding:40px 32px;text-align:center;max-width:340px;width:90%;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);">
-    <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1a7a4a,#22a866);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-      <svg viewBox="0 0 42 42" fill="none" style="width:36px;height:36px;"><polyline points="8,22 17,31 34,13" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div id="order-success" style="display:none;position:fixed;inset:0;background:rgba(8,16,48,0.95);z-index:9999;align-items:flex-start;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px;">
+  <div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:600px;width:100%;margin:0 auto;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);">
+    
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#1a7a4a,#22a866);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg viewBox="0 0 42 42" fill="none" style="width:26px;height:26px;"><polyline points="8,22 17,31 34,13" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div style="font-size:18px;font-weight:800;color:#0d1f4e;">Order Confirmed!</div>
+        <div id="summary-doctor" style="font-size:12px;color:#6b7fa8;"></div>
+      </div>
     </div>
-    <div style="font-size:22px;font-weight:800;color:#0d1f4e;margin-bottom:8px;">Order Confirmed!</div>
-    <div style="font-size:13px;color:#6b7fa8;margin-bottom:24px;">Your order has been recorded.<br>We will contact you shortly.</div>
-    <button onclick="closeOrderSuccess()" style="width:100%;height:48px;background:linear-gradient(135deg,#0d1f4e,#2a4a9f);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;-webkit-appearance:none;">Done</button>
+
+    <!-- In-stock items -->
+    <div id="summary-instock-wrap" style="display:none;margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:#22a866;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">✓ Available — Taken from stock</div>
+      <div id="summary-instock" style="background:#f0faf5;border-radius:10px;padding:10px 14px;"></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:6px;gap:16px;">
+        <span style="font-size:12px;color:#6b7fa8;">Total:</span>
+        <span style="font-size:14px;font-weight:800;color:#0d1f4e;"><span id="summary-total-eur">0</span> EUR &nbsp;|&nbsp; <span id="summary-total-ron">0</span> RON</span>
+      </div>
+    </div>
+
+    <!-- Future order items -->
+    <div id="summary-future-wrap" style="display:none;margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:#e67e22;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">⏳ Future Order — Not in stock</div>
+      <div id="summary-future" style="background:#fff8f0;border-radius:10px;padding:10px 14px;"></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:6px;gap:16px;">
+        <span style="font-size:12px;color:#6b7fa8;">Total:</span>
+        <span style="font-size:14px;font-weight:800;color:#0d1f4e;"><span id="summary-future-eur">0</span> EUR &nbsp;|&nbsp; <span id="summary-future-ron">0</span> RON</span>
+      </div>
+
+      <!-- Future order email question -->
+      <div style="background:#fff3e0;border:1.5px solid #f0a500;border-radius:10px;padding:12px 14px;margin-top:12px;">
+        <div style="font-size:13px;font-weight:700;color:#0d1f4e;margin-bottom:10px;">📧 Do you want a copy of your future order by email?</div>
+        <div style="display:flex;gap:10px;">
+          <button onclick="sendFutureEmail()" style="flex:1;height:42px;background:#0d1f4e;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;">Yes, send me a copy</button>
+          <button onclick="closeSummary()" style="flex:1;height:42px;background:#fff;border:1.5px solid #c5d0e8;color:#6b7fa8;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;">No, thanks</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Close button (only if no future items) -->
+    <button id="close-summary-btn" onclick="closeSummary()" style="width:100%;height:48px;background:linear-gradient(135deg,#0d1f4e,#2a4a9f);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;">Done ✓</button>
+
   </div>
 </div>
 
@@ -248,7 +286,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 
 <script>
 
-var SHEET_URL = 'https://script.google.com/macros/s/AKfycbznKJli1PjCHLVXJXZ4_JXjRsbyNo2d2_Bs8O2zo0FRwnxJFDWiNtQhmITT7hbnC5A/exec';
+var SHEET_URL = 'https://script.google.com/macros/s/AKfycbxI5Tyj1F_zc9i4WV-FHy2kzzlG6CVymAUz1fv0a5CNqfmZfoheNnwYON1AUjdHBm4/exec';
 var FAKE_OFFSET = Math.floor(Math.random() * 6) + 15;
 var realCount = 0;
 if(document.getElementById('counter')) document.getElementById('counter').textContent = FAKE_OFFSET;
@@ -312,7 +350,7 @@ document.addEventListener('click',function(e){if(!e.target.closest('.country-wra
 function showErr(f,e){document.getElementById(f).classList.add('error');document.getElementById(e).style.display='block';}
 function clearErr(f,e){document.getElementById(f).classList.remove('error');document.getElementById(e).style.display='none';}
 function validate(){var ok=true;var name=document.getElementById('name').value.trim();if(!name){showErr('name','name-err');ok=false;}else{clearErr('name','name-err');}var country=document.getElementById('country-value').value.trim();if(!country){showErr('country-input','country-err');ok=false;}else{clearErr('country-input','country-err');}var phone=document.getElementById('phone-number').value.trim();if(!phone){showErr('phone-number','phone-err');ok=false;}else{clearErr('phone-number','phone-err');}var email=document.getElementById('email').value.trim();if(!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)){showErr('email','email-err');ok=false;}else{clearErr('email','email-err');}return ok;}
-function sendToSheet(contact){var xhr=new XMLHttpRequest();xhr.open('POST',SHEET_URL,true);xhr.setRequestHeader('Content-Type','text/plain');xhr.send(JSON.stringify(contact));}
+function sendToSheet(contact){contact.type='contact';var xhr=new XMLHttpRequest();xhr.open('POST',SHEET_URL,true);xhr.setRequestHeader('Content-Type','text/plain');xhr.send(JSON.stringify(contact));}
 function submitForm(){
   var name=document.getElementById('name').value.trim();
   var country=document.getElementById('country-value').value.trim();
@@ -328,7 +366,7 @@ function submitForm(){
   sendToSheet(contact);
   var nl='%0D%0A';
   var subject=encodeURIComponent('Global Med Care Shop - Marina Medical Instruments');
-  var body='Dear '+encodeURIComponent(name)+','+nl+'We are pleased to connect with you!'+nl+'We would like to introduce our new website, where you can purchase Marina Medical instruments with delivery across Europe.'+nl+'As you already know Global Med Care is the exclusive commercial partner of Marina Medical in Europe, and through our platform you can quickly and easily order the available products: https://globalmed-shop.com/'+nl+'Please feel free to contact us for any further information.'+nl+'Kind regards,'+nl+'Global Med Care Team';
+  var body='Dear '+encodeURIComponent(name)+','+nl+'We are pleased to connect with you!'+nl+'We would like to introduce our new website, where you can purchase Marina Medical instruments with delivery across Europe.'+nl+'As you already know Global Med Care is the exclusive commercial partner of Marina Medical in Europe, and through our platform you can quickly and easily order the available products:'+nl+'https://globalmed-shop.com/'+nl+'Please feel free to contact us for any further information.'+nl+'Kind regards,'+nl+'Global Med Care Team';
   window.location.href='mailto:'+email+'?subject='+subject+'&body='+body;
   document.getElementById('success-name').textContent=name+' saved!';
   document.getElementById('success-overlay').classList.add('show');
@@ -337,7 +375,7 @@ function submitForm(){
 function nextContact(){stopFireworks();document.getElementById('success-overlay').classList.remove('show');['name','specialty','phone-number','email'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('country-input').value='';document.getElementById('country-value').value='';selectedCountry=null;}
 
 
-var SHEET_URL2 = 'https://script.google.com/macros/s/AKfycbytHH80b3ztnQGUMzDgxVN3ON6sO3aV5g_dXwuT8Pdqd27t1sJtATjISKCpltGqGz6Q/exec';
+var SHEET_URL2 = 'https://script.google.com/macros/s/AKfycbxI5Tyj1F_zc9i4WV-FHy2kzzlG6CVymAUz1fv0a5CNqfmZfoheNnwYON1AUjdHBm4/exec';
 var RON_RATE = 5.241;
 var catalog = [{"code": "050-184SC", "name": "Scissors, Metzenbaum, SC, 20cm", "price": 123, "stock": 1}, {"code": "050-188SC", "name": "Scissors, Metzenbaum, SC, 23cm", "price": 119, "stock": 1}, {"code": "020-100", "name": "Magnetic Drape 30.5 x 38cm Reusable", "price": 193, "stock": 2}, {"code": "050-175SC", "name": "Scissors, Metzenbaum, SC, Straight, 11.5cm", "price": 119, "stock": 1}, {"code": "050-176SC", "name": "Scissors, Baby Metz, SC, 11.5cm", "price": 119, "stock": 1}, {"code": "050-180SC", "name": "Scissors, Metzembaum, SC, 14cm", "price": 126, "stock": 1}, {"code": "050-182SC", "name": "Scissors, Metzenbaum, SC, 17.75cm", "price": 119, "stock": 1}, {"code": "050-320", "name": "Scissors, O'Brien, Angled, 10cm", "price": 46, "stock": 1}, {"code": "050-342SC", "name": "Scissors, Reynolds, Tenotomy, SC, 15cm", "price": 148, "stock": 1}, {"code": "050-426SC", "name": "Scissors, Ragnell-Kilner, SC, 13cm", "price": 109, "stock": 1}, {"code": "050-453", "name": "Scissors, Gradle, Ribbon Straight, 10cm", "price": 56, "stock": 1}, {"code": "050-455", "name": "Scissors, Gradle, Ribbon Curved, 10cm", "price": 58, "stock": 1}, {"code": "050-701SC", "name": "Scissors, Iris, SC Straight, 11.5cm", "price": 109, "stock": 1}, {"code": "050-702CER", "name": "Scissors, Iris Ceramic Curved 11.5cm", "price": 179, "stock": 1}, {"code": "050-702SC", "name": "Scissors, Iris, SC, 11.5cm", "price": 109, "stock": 1}, {"code": "050-711SC", "name": "Scissors, Stevens, SC Straight, 11cm", "price": 109, "stock": 1}, {"code": "050-712CER", "name": "Scissors, Stevens, Ceramic Curved, 11cm", "price": 204, "stock": 1}, {"code": "050-712SC", "name": "Scissors, Stevens, SC, 11cm", "price": 115, "stock": 1}, {"code": "050-713CER", "name": "Scissors, Stevens, Tenotomy, Curved, 12cm", "price": 180, "stock": 1}, {"code": "060-191", "name": "Forceps, Sundal Adson, Suturing, 12cm", "price": 46, "stock": 1}, {"code": "060-512", "name": "Forceps, Debakey Tissue, 1.5mm, 20cm", "price": 60, "stock": 1}, {"code": "110-122NC", "name": "Retractor, U.S. Army, Parker-Langenbeck, NC", "price": 70, "stock": 1}, {"code": "270-420", "name": "Ruler, Stainless Steel, mm/in, 15cm", "price": 21, "stock": 1}, {"code": "270-422", "name": "Ruler, Stainless Steel, mm/in, 20cm", "price": 21, "stock": 1}, {"code": "310-218", "name": "Forceps, Potts-Smith, NC, Tip 2mm, 18cm", "price": 68, "stock": 1}, {"code": "310-221", "name": "Forceps, Potts-Smith, NC, Tip 2mm, 21cm", "price": 68, "stock": 1}, {"code": "310-231", "name": "Forceps, Potts-Smith, NC, Teeth, 21cm", "price": 68, "stock": 1}, {"code": "400-940", "name": "Scissors, Kelly, TC, Straight, 15.25cm", "price": 96, "stock": 1}, {"code": "400-941", "name": "Scissors, Kelly, TC, Curved, 15.25cm", "price": 102, "stock": 1}, {"code": "420-040", "name": "Needle Holder, Baby Webster, Serrated, TC, 12cm", "price": 91, "stock": 1}, {"code": "420-042", "name": "Needle Holder, Baby Webster, Smooth, TC, 12cm", "price": 91, "stock": 1}, {"code": "420-044", "name": "Needle Holder, Derf, Serrated, TC, 12cm", "price": 91, "stock": 1}, {"code": "420-070", "name": "Needle Holder, Webster, Smooth, 13cm", "price": 91, "stock": 1}, {"code": "420-075", "name": "Needle Holder, Halsey, Serrated TC 13cm", "price": 91, "stock": 1}, {"code": "420-100", "name": "Needle Holder, Crilewood, Serrated, TC, 15cm", "price": 96, "stock": 1}, {"code": "420-100S", "name": "Needle Holder, Crilewood, Smooth, TC, 15cm", "price": 91, "stock": 1}, {"code": "420-314", "name": "Needle Holder, Mayo Hegar, Serrated, TC 14cm", "price": 91, "stock": 1}, {"code": "420-316", "name": "Needle Holder, Mayo Hegar, Serrated, TC, 16cm", "price": 91, "stock": 1}, {"code": "420-320", "name": "Needle Holder, Mayo Hegar, Serrated, TC, 20cm", "price": 91, "stock": 1}, {"code": "420-452", "name": "Needle Holder, Micro-Ryder, TC, 13cm", "price": 91, "stock": 1}, {"code": "420-454", "name": "Needle Holder, Micro-Ryder, TC, 15cm", "price": 91, "stock": 1}, {"code": "440-214", "name": "Forceps, Adson, TC, Delicate, 1.5mm, 12cm", "price": 88, "stock": 1}, {"code": "440-312", "name": "Forceps, Adson, TC, 1x2, 12cm", "price": 88, "stock": 1}, {"code": "440-315", "name": "Forceps, Adson, TC, Fine, 15cm", "price": 77, "stock": 1}, {"code": "440-316", "name": "Forceps, Adson, TC, 1x2, Delicate, 12cm", "price": 81, "stock": 1}, {"code": "440-317", "name": "Forceps, Adson, TC, 1x2, Delicate, 15cm", "price": 81, "stock": 1}, {"code": "440-318", "name": "Forceps, Adson, TC, 1x2, 2mm, 15cm", "price": 77, "stock": 1}, {"code": "520-310", "name": "Needle Holder, Baby-Webster, Titanium, 12cm", "price": 92, "stock": 1}, {"code": "520-911", "name": "Needle Holder, Olsen-Hegar, Titanium, 14cm", "price": 92, "stock": 1}, {"code": "560-128", "name": "Forceps, Adson, Titanium, 12cm", "price": 56, "stock": 1}, {"code": "560-133", "name": "Forceps, Robotti-Brown, Titanium, 12cm", "price": 56, "stock": 1}, {"code": "560-134", "name": "Adson Forceps, Titanium, 1x2, 12cm", "price": 56, "stock": 1}, {"code": "560-170", "name": "Forceps, Adson-Brown, Titanium, 7x7, 12cm", "price": 56, "stock": 1}, {"code": "560-912", "name": "Needle Holder, Halsey, Titanium, 13cm", "price": 84, "stock": 1}, {"code": "572-015", "name": "Needle Holder, Webster, Delicate, Titanium, 12cm", "price": 91, "stock": 1}, {"code": "572-033", "name": "Needle Holder, Mayo, Smooth, Titanium, 16cm", "price": 98, "stock": 1}, {"code": "572-318", "name": "Needle Holder, Mayo Hegar, Titanium, 18cm", "price": 105, "stock": 1}, {"code": "180-100NS", "name": "Monopolar Forceps, 0.7mm, Non-stick, 10in", "price": 249, "stock": 5}, {"code": "180-117NS", "name": "Forceps, Monopolar Hand Switching, 1mm, 17.75cm", "price": 249, "stock": 1}, {"code": "110-305L", "name": "Retractor, Pelosi, Abdominal, Light, Large", "price": 455, "stock": 1}, {"code": "110-391", "name": "Iconoclast, Large", "price": 270, "stock": 1}, {"code": "110-653", "name": "Retractor, Double Ended, Breast, 26cm", "price": 210, "stock": 1}, {"code": "110-673E", "name": "Retractor, Ferriera, Endoscopic, 23mm x15cm", "price": 442, "stock": 1}, {"code": "110-675LS", "name": "Retractor, Ferriera, Fiberoptic, Suction, 25mm x 10cm", "price": 294, "stock": 1}, {"code": "110-676LS", "name": "Retractor, Ferriera, Fiberoptic, Suction, 25mm x 12cm", "price": 294, "stock": 1}, {"code": "110-677LS", "name": "Retractor, Ferriera, Fiberoptic, Suction, 30mm x 12cm", "price": 294, "stock": 1}, {"code": "150-345", "name": "Conrad Separator, 20cm", "price": 130, "stock": 1}, {"code": "201-138", "name": "McKissock Breast Caliper, 38mm", "price": 34, "stock": 1}, {"code": "201-142", "name": "McKissock Breast Caliper, 42mm", "price": 32, "stock": 1}, {"code": "201-145", "name": "McKissock Breast Caliper, 45mm", "price": 32, "stock": 1}, {"code": "310-224", "name": "Forceps, Potts-Smith, NC, 2mm, 24cm", "price": 82, "stock": 1}, {"code": "310-228", "name": "Forceps, Potts-Smith, NC, Teeth, 18cm", "price": 68, "stock": 1}, {"code": "050-318SC", "name": "Scissors, Kaye, SC, 11.5cm", "price": 158, "stock": 1}, {"code": "050-918CER", "name": "Scissors, Gorney, Ceramic Curved, 19cm", "price": 280, "stock": 1}, {"code": "050-918SC", "name": "Scissors, Gorney, SC, 19cm", "price": 245, "stock": 1}, {"code": "050-926CER", "name": "Scissors, Kaye-Freeman, Ceramic Curved, 19cm", "price": 280, "stock": 1}, {"code": "050-933SC", "name": "Scissors, Kaye, SC, 15.25cm", "price": 245, "stock": 1}, {"code": "050-944CER", "name": "Scissors, Kaye, Ceramic Curved, 19cm", "price": 280, "stock": 1}, {"code": "050-944SC", "name": "Scissors, Kaye, SC, 19cm", "price": 245, "stock": 1}, {"code": "050-947CER", "name": "Scissors, Rees-Aston Curved, 17cm", "price": 280, "stock": 1}, {"code": "050-948CER", "name": "Scissors, Rees, Ceramic Curved, 20.5cm", "price": 280, "stock": 1}, {"code": "050-948SC", "name": "Scissors, Rees, SC, 20.5cm", "price": 245, "stock": 1}, {"code": "050-952CER", "name": "Scissors, Gorney-Freeman, Ceramic Curved, 19cm", "price": 280, "stock": 1}, {"code": "050-953CER", "name": "Scissors, Gorney-Freeman, Ceramic Curved, 23cm", "price": 280, "stock": 1}, {"code": "050-961SC", "name": "Scissors, Trepsat, Elevator, Small, 18cm", "price": 205, "stock": 1}, {"code": "050-962SC", "name": "Scissors, Trepsat, Elevator, Large, 18cm", "price": 205, "stock": 1}, {"code": "050-963SC", "name": "Scissors, Trepsat, Elevator, Medium, 18cm", "price": 205, "stock": 1}, {"code": "050-970SC", "name": "Scissors, Aston, SC, 20.5cm", "price": 245, "stock": 1}, {"code": "060-420", "name": "Forceps, Green Fixation, No Lock, 10mm, 10cm", "price": 85, "stock": 1}, {"code": "060-430", "name": "Forceps, Green Fixation, Lock, 10mm, 10cm", "price": 91, "stock": 1}, {"code": "060-432", "name": "Forceps, Putterman, 10cm", "price": 240, "stock": 1}, {"code": "060-440", "name": "Green Fixation Forceps, No Lock, 5mm, 11cm", "price": 81, "stock": 1}, {"code": "08-0165", "name": "Accessory, Sheath, Spatula Tip, Rotating", "price": 500, "stock": 1}, {"code": "08-0170", "name": "Accessory, Sheath, Fenestrated, Spatula Tip", "price": 500, "stock": 1}, {"code": "110-050NC", "name": "Retractor, Desmarres, Lid, 10mm, NC", "price": 67, "stock": 1}, {"code": "110-052NC", "name": "Retractor, Desmarres, Lid, 12mm, NC", "price": 63, "stock": 1}, {"code": "110-054NC", "name": "Retractor, Desmarres, Lid, 14mm, NC", "price": 63, "stock": 1}, {"code": "110-058NC", "name": "Retractor, Desmarres, Double Ended, NC", "price": 63, "stock": 1}, {"code": "110-073NC", "name": "Retractor, Ragnell-Davis, NC, 15cm", "price": 63, "stock": 1}, {"code": "110-074NC", "name": "Retractor, Senn-Mueller, Sharp, NC, 16cm", "price": 63, "stock": 1}, {"code": "110-076NC", "name": "Retractor, Senn-Mueller, Blunt, NC, 16cm", "price": 63, "stock": 1}, {"code": "110-342", "name": "Retractor, Anderson, 3 Prongs, 12cm", "price": 74, "stock": 1}, {"code": "110-344", "name": "Retractor, Anderson, 5 Prongs, 12cm", "price": 111, "stock": 1}, {"code": "110-397", "name": "D'Assumpcao Flap Marker, 16cm", "price": 168, "stock": 1}, {"code": "150-100", "name": "Dissector, Rz8, SOOF and Inferior Orbital Rim", "price": 129, "stock": 1}, {"code": "150-101", "name": "Dissector, Rz7, Periorbital Dissector", "price": 129, "stock": 1}, {"code": "150-102", "name": "Dissector, Rz10, Precision Soft Tissue", "price": 129, "stock": 1}, {"code": "150-103", "name": "Dissector, Rz3, Frontal and Parietal Suction", "price": 129, "stock": 1}, {"code": "150-104", "name": "Dissector, Rz4, Frontal and Parietal Fingernail", "price": 129, "stock": 1}, {"code": "150-105", "name": "Dissector, Rz1, Temporal Fascial", "price": 129, "stock": 1}, {"code": "150-106", "name": "Dissector, Rz5, Glabellar, Superior Orbital Rim", "price": 129, "stock": 1}, {"code": "150-107", "name": "Rz6: Infra-Brow Periosteal Spreader", "price": 129, "stock": 1}, {"code": "150-108", "name": "Dissector, Rz9, Midface, Chin and Mandibular", "price": 129, "stock": 1}, {"code": "150-109", "name": "Dissector, Rz2, Temporal Line of Fusion", "price": 116, "stock": 1}, {"code": "150-550A", "name": "Scissors, Metzenbaum, Endoscopic, Curved, Monopolar", "price": 600, "stock": 1}, {"code": "150-586A", "name": "Grasper, Endoscopic, Needle Nose, Curved", "price": 600, "stock": 1}, {"code": "20-0174", "name": "Telescope, 4mm OD, 30 Degree, 17.5cm", "price": 1950, "stock": 1}, {"code": "OK21-261", "name": "Shield, Laser, SS, Suction Cup, X-Small, 22mm", "price": 170, "stock": 2}, {"code": "OK21-262", "name": "Shield, Laser, SS, Suction Cup, Small, 24mm", "price": 170, "stock": 2}, {"code": "OK21-262HL", "name": "Shield, Laser, SS, Left Handle, Small, 24mm", "price": 170, "stock": 1}, {"code": "OK21-262HR", "name": "Shield, Laser, SS, Right Handle, Small, 24mm", "price": 170, "stock": 1}, {"code": "OK21-264", "name": "Shield, Laser, SS, Suction Cup, Medium, 25.5mm", "price": 170, "stock": 2}, {"code": "OK21-264HL", "name": "Shield, Laser, SS, Left Handle, Medium, 25.5mm", "price": 170, "stock": 1}, {"code": "OK21-264HR", "name": "Shield, Laser, SS, Right Handle, Medium, 25.5mm", "price": 170, "stock": 1}, {"code": "OK21-266", "name": "Shield, Laser, SS, Suction Cup, Large, 26.5mm", "price": 170, "stock": 2}, {"code": "OK23-201B", "name": "Shield, Ocular, Plastic, X-Small, 21.5mm, Black", "price": 80, "stock": 1}, {"code": "OK23-201HB", "name": "Shield, Ocular, Plastic, X-Small, 21.5mm, Black, Handle", "price": 80, "stock": 1}, {"code": "OK23-202B", "name": "Shield, Ocular, Plastic, Small, 25mm, Black", "price": 80, "stock": 1}, {"code": "OK23-202HB", "name": "Shield, Ocular, Plastic, Small, 25mm, Black, Handle", "price": 80, "stock": 1}, {"code": "OK23-204B", "name": "Shield, Ocular, Plastic, Medium, 27mm, Black", "price": 80, "stock": 1}, {"code": "OK23-204HB", "name": "Shield, Ocular, Plastic, Medium, 27mm, Black, Handle", "price": 80, "stock": 1}, {"code": "OK23-204YH", "name": "Shield, Ocular, Plastic, Medium, 27mm, Yellow, Handle", "price": 80, "stock": 1}, {"code": "OK23-206B", "name": "Shield, Ocular, Plastic, Large, 28mm, Black", "price": 80, "stock": 1}, {"code": "OK23-206HB", "name": "Shield, Ocular, Plastic, Large, 28mm, Black, Handle", "price": 80, "stock": 1}, {"code": "OK23-206Y", "name": "Shield, Ocular, Plastic, Large, 28mm, Yellow", "price": 80, "stock": 1}, {"code": "201-095", "name": "Dingman Otobraders, Left and Right, 15cm", "price": 84, "stock": 1}, {"code": "NE12-0124", "name": "Needle Holder, Axial, Straight, 5mm x 33cm", "price": 900, "stock": 1}, {"code": "800-100", "name": "6 Hole Infiltrator, 14G x 20cm, Luer", "price": 175, "stock": 1}, {"code": "800-162", "name": "Luer Lock to Christmas Tree Handle", "price": 128, "stock": 1}, {"code": "800-163", "name": "Infusion Handle with on/off control valve", "price": 220, "stock": 1}, {"code": "800-200", "name": "Khouri Aggressive Harvester, 12G x 20cm", "price": 175, "stock": 1}, {"code": "800-201", "name": "Khouri Aggressive Harvester, 12G x 25cm", "price": 175, "stock": 1}, {"code": "800-202", "name": "Khouri Aggressive Harvester, 12G x 30cm", "price": 175, "stock": 1}, {"code": "800-300", "name": "Khouri Reinjector, 14G x 15cm, Curved", "price": 175, "stock": 1}, {"code": "800-300S", "name": "Khouri Reinjector, 14G x 15cm, Straight", "price": 175, "stock": 1}, {"code": "800-305", "name": "Khouri Reinjector, 14G x 20cm, Curved", "price": 175, "stock": 1}, {"code": "800-312", "name": "Khouri Reinjector, 14G x 25cm, Curved", "price": 175, "stock": 1}, {"code": "800-320", "name": "Blunt Injector, 19G x 5cm, Luer", "price": 175, "stock": 1}, {"code": "800-325", "name": "Blunt Injector, 18G x 7cm, Luer", "price": 175, "stock": 1}, {"code": "800-330", "name": "Blunt Injector, 17G x 9cm, Luer", "price": 175, "stock": 1}, {"code": "800-335", "name": "Blunt Injector, 16G x 12cm, Luer", "price": 175, "stock": 1}, {"code": "800-340", "name": "Super Smooth Power Tip Injector 14ga x 15cm", "price": 175, "stock": 1}, {"code": "800-395", "name": "Micro Injector, 22G x 3cm, Luer", "price": 175, "stock": 1}, {"code": "800-405", "name": "Lipo Cannula, V-port, Moses, 11g x 15cm", "price": 175, "stock": 1}, {"code": "800-410", "name": "Moses Micro Harvester, 11G x 25cm", "price": 175, "stock": 1}, {"code": "150-401", "name": "Dissector, Faga, Viterbo, Curved, 120mm", "price": 158, "stock": 1}, {"code": "150-402", "name": "Dissector, Faga, Viterbo, Straight, 120mm", "price": 158, "stock": 1}, {"code": "150-403", "name": "Dissector, Faga, Viterbo, Left, 120mm", "price": 158, "stock": 1}, {"code": "150-404", "name": "Dissector, Faga, Viterbo, Right, 120mm", "price": 158, "stock": 1}, {"code": "190-273", "name": "Dissector, Tommasino, Probe, Double-Ended, 130mm", "price": 104, "stock": 1}, {"code": "110-330S", "name": "Piezo, Tebbetts-Gerbault, Nasal, Retractor", "price": 230, "stock": 1}, {"code": "050-335SC", "name": "Scissors, Cerkes, SC, 11.5cm", "price": 196, "stock": 1}, {"code": "050-452SC", "name": "Scissors, Goldman Fox, SC, 12.75cm", "price": 130, "stock": 1}, {"code": "050-460SC", "name": "Scissors, Fomon Dorsal, SC Angled, 14cm", "price": 172, "stock": 1}, {"code": "050-466SC", "name": "Scissors, Cottle Dorsal, SC Angled, 16cm", "price": 193, "stock": 1}, {"code": "050-470SC", "name": "Scissors, LaGrange, SC Bent Shanks, 11cm", "price": 116, "stock": 1}, {"code": "050-472", "name": "Scissors, Wilmer-Converse, Angled, 10cm", "price": 100, "stock": 1}, {"code": "050-480", "name": "Scissors, Cerkes, Caplan, Nasal, TC, 20cm", "price": 408, "stock": 1}, {"code": "050-713SCD", "name": "Scissors, Stevens, SC, Curved, 11cm, Delicate", "price": 144, "stock": 1}, {"code": "050-976SC", "name": "Scissors, Giunta, SC, Angled Curved, 13.5cm", "price": 296, "stock": 1}, {"code": "050-977SC", "name": "Scissors, Slim, SC, 14cm", "price": 175, "stock": 1}, {"code": "050-978SC", "name": "Scissors, Walter, SC, Angled, 14cm", "price": 245, "stock": 1}, {"code": "060-070", "name": "Forceps, Constantian, Rib, 14cm", "price": 122, "stock": 1}, {"code": "060-170", "name": "Forceps, Adson-Brown, 7x7 Teeth, 12cm", "price": 21, "stock": 1}, {"code": "060-181", "name": "Forceps, Sheen Gripping, With Pins, 13cm", "price": 105, "stock": 1}, {"code": "110-060", "name": "Retractor, Robotti, Double-Ended", "price": 56, "stock": 1}, {"code": "110-061", "name": "Retractor, Robotti, Columella", "price": 56, "stock": 1}, {"code": "190-176", "name": "Hook, Kleiner-Kutz Skin, Single Prong, 16cm", "price": 28, "stock": 1}, {"code": "190-182", "name": "Hook, Joseph, Skin, Double-Prong, 5mm, 15cm", "price": 22, "stock": 1}, {"code": "190-183", "name": "Hook, Joseph, Skin, Double-Prong, 7mm, 15cm", "price": 30, "stock": 1}, {"code": "190-1831", "name": "Hook, Joseph, Skin, Double-Prong, 10mm, 15cm", "price": 30, "stock": 1}, {"code": "190-223", "name": "Elevator, Freer, Sharp/Blunt, 2.5mm, 18cm", "price": 74, "stock": 1}, {"code": "190-251", "name": "Elevator, Gorney Suction, 3mm, 19cm", "price": 105, "stock": 1}, {"code": "190-254", "name": "Elevator, Cottle, Periosteal, 4mm, 16cm", "price": 58, "stock": 1}, {"code": "190-255", "name": "Elevator, Cottle, Septum, Double-Ended, 23cm", "price": 89, "stock": 1}, {"code": "190-261", "name": "Daniel-Robotti Perichondrium Scratcher, 17.5cm", "price": 70, "stock": 1}, {"code": "190-267", "name": "Elevator, Robotti, Double-Ended, Mini", "price": 63, "stock": 1}, {"code": "190-268", "name": "Elevator, Robotti, Micro, 2mm, 16cm", "price": 91, "stock": 1}, {"code": "190-269", "name": "Elevator, Robotti, Micro, 3mm, 16cm", "price": 91, "stock": 1}, {"code": "190-270", "name": "Elevator, Robotti, Micro, 4mm, 16cm", "price": 84, "stock": 1}, {"code": "190-271", "name": "Elevator, Robotti, Double-Ended, Septal, Large", "price": 63, "stock": 1}, {"code": "190-274", "name": "Robotti Diced Cartilage Inserter", "price": 105, "stock": 1}, {"code": "190-275", "name": "Elevator, Rico, Double-Ended, 4mm, Curved", "price": 67, "stock": 1}, {"code": "190-290LC", "name": "Speculum, Cottle, Nasal, 35mm, Laser Coated", "price": 182, "stock": 1}, {"code": "190-290S", "name": "Speculum, Gerbault, Nasal, 35mm Blade, Suction", "price": 168, "stock": 1}, {"code": "190-293S", "name": "Speculum, Goksel-East, 50mm Blade, Suction", "price": 175, "stock": 1}, {"code": "190-308L", "name": "Retractor, Converse, Nasal, 40mm, Light", "price": 203, "stock": 1}, {"code": "190-310L", "name": "Retractor, Converse, Nasal, 50mm, Light Pipe", "price": 203, "stock": 1}, {"code": "190-329", "name": "Piezo, Gerbault, Suction, Retractor", "price": 230, "stock": 1}, {"code": "190-508", "name": "Cerkes Dorsum Nipper", "price": 77, "stock": 1}, {"code": "190-548", "name": "Jameson Caliper, 9.5cm", "price": 90, "stock": 1}, {"code": "190-710", "name": "Elevator, Robotti, Rib, Set (Left and Right)", "price": 112, "stock": 1}, {"code": "200-110", "name": "Osteotome, Cinelli, Double Guarded, 10mm", "price": 98, "stock": 1}, {"code": "200-112", "name": "Osteotome, Cinelli, Double Guarded, 12mm", "price": 84, "stock": 1}, {"code": "200-122", "name": "Osteotome, Sheehan, 2mm, 16cm", "price": 84, "stock": 1}, {"code": "200-123", "name": "Osteotome, Sheehan, 3mm, 16cm", "price": 81, "stock": 1}, {"code": "200-136", "name": "Osteotome, Cerkes, Micro, 2mm", "price": 163, "stock": 1}, {"code": "200-137", "name": "Osteotome, Cerkes, Micro, 3mm", "price": 163, "stock": 1}, {"code": "200-138", "name": "Osteotome, Cerkes, Micro, 4mm", "price": 163, "stock": 1}, {"code": "200-139", "name": "Osteotome, Cerkes, Micro, 6mm", "price": 147, "stock": 1}, {"code": "200-141", "name": "Osteotome, Cerkes, Medial, Oblique, 3mm", "price": 89, "stock": 1}, {"code": "200-142", "name": "Osteotome, Cerkes, Medial, Oblique, 4mm", "price": 89, "stock": 1}, {"code": "200-143", "name": "Cerkes Scratcher", "price": 81, "stock": 1}, {"code": "200-144", "name": "Tebbetts Osteotome, 3mm", "price": 91, "stock": 1}, {"code": "200-145", "name": "Tebbetts Osteotome, 2mm", "price": 133, "stock": 1}, {"code": "200-182", "name": "Osteotome, Neivert, Straight, 20cm", "price": 77, "stock": 1}, {"code": "200-183", "name": "Osteotome, Neivert, Curved, Right, 20cm", "price": 77, "stock": 1}, {"code": "200-184", "name": "Osteotome, Neivert, Curved, Left, 20cm", "price": 77, "stock": 1}, {"code": "200-190", "name": "Rasp, Glabellar, Nasal, TC, 20cm", "price": 189, "stock": 1}, {"code": "200-191", "name": "Cakir 90", "price": 77, "stock": 1}, {"code": "200-192", "name": "Rasp, Peet Cottle, Diamond Dust, 19cm", "price": 217, "stock": 1}, {"code": "200-201", "name": "Rasp, Fomon, TC, 1/2 Very Fine, 20cm", "price": 200, "stock": 1}, {"code": "200-203", "name": "Rasp, Fomon, TC, 3/4 Medium Fine, 20cm", "price": 200, "stock": 1}, {"code": "200-205", "name": "Rasp, Fomon, TC, 5/6 Medium, 20cm", "price": 200, "stock": 1}, {"code": "200-207", "name": "Rasp, Fomon, TC, 7/8 Medium Coarse, 20cm", "price": 200, "stock": 1}, {"code": "200-209", "name": "Rasp, Fomon, TC, 9/10 Very Coarse, 20cm", "price": 200, "stock": 1}, {"code": "200-216", "name": "Rasp, Landecker, Finishing, TC, 2/8", "price": 200, "stock": 1}, {"code": "200-217", "name": "Rasp, Celik, Finishing, TC, 5/6", "price": 200, "stock": 1}, {"code": "200-228", "name": "Rasp, Suction, 6mm, Pull", "price": 364, "stock": 1}, {"code": "200-253", "name": "Retractor, Robotti, Nasal", "price": 70, "stock": 1}, {"code": "200-501", "name": "Preservation Rhinoplasty: Lateral Saw", "price": 170, "stock": 1}, {"code": "200-502", "name": "Preservation Rhinoplasty: Medial Saw", "price": 170, "stock": 1}, {"code": "200-503", "name": "Preservation Rhinoplasty: Convex Transverse Saw", "price": 170, "stock": 1}, {"code": "200-504", "name": "Preservation Rhinoplasty: Concave Radix Saw", "price": 236, "stock": 1}, {"code": "200-505", "name": "Preservation Rhinoplasty: Costa Saw", "price": 243, "stock": 1}, {"code": "200-506", "name": "Rasp, Cakir, Preservation Rhinoplasty", "price": 170, "stock": 1}, {"code": "200-507", "name": "Rasp, Preservation Rhinoplasty, Double-Sided", "price": 170, "stock": 1}, {"code": "200-508", "name": "Rongeur, Marina, Delicate, Straight", "price": 200, "stock": 1}, {"code": "200-509", "name": "Rongeur, Marina, Delicate, Curved", "price": 275, "stock": 1}, {"code": "200-510", "name": "Rasp, Tastan, Preservation Rhinoplasty, 5mm", "price": 170, "stock": 1}, {"code": "200-511", "name": "Rasp, Preservation Rhinoplasty, 3mm, Straight", "price": 170, "stock": 1}, {"code": "200-512", "name": "Rasp, Preservation Rhinoplasty, 3mm, Curved", "price": 170, "stock": 1}, {"code": "200-572", "name": "Forceps, Takahashi, Straight, 4x10mm, 19cm", "price": 319, "stock": 1}, {"code": "289-265", "name": "Retractor, Cerkes, Weighted Nasal, 6.5cm", "price": 111, "stock": 1}, {"code": "289-290", "name": "Cerkes Hand Drill", "price": 96, "stock": 1}, {"code": "289-291", "name": "Cerkes Nasal Trocar (Delicate)", "price": 77, "stock": 1}, {"code": "289-408", "name": "Measuring, Sheen Grid, Blue, Aluminum", "price": 70, "stock": 1}, {"code": "289-410", "name": "Delrin Cutting Block, 12cm square, 10mm", "price": 156, "stock": 1}, {"code": "289-411", "name": "Robotti Cutting Block, Silicone", "price": 112, "stock": 1}, {"code": "289-500", "name": "Retractor, Desmarres, Weighted Nasal 12mm", "price": 133, "stock": 1}, {"code": "520-001", "name": "Hook, Robotti Skin, Titanium, Double Prong, 1.5mm", "price": 63, "stock": 1}, {"code": "520-002", "name": "Hook, Robotti Skin, Titanium, Double Prong, 2.1mm", "price": 63, "stock": 1}, {"code": "580-000", "name": "Titanium Nasal Goniometer (40-160\u00b0)", "price": 140, "stock": 1}, {"code": "050-946SC", "name": "Kaye Scissors with flat tips, SC Curved, 23cm", "price": 245, "stock": 1}, {"code": "PAL-ADAPTERLL", "name": "PAL Luer Adapter for Microaire", "price": 175, "stock": 1}, {"code": "050-440", "name": "Scissors, Walden-Marshall breast dissection, 25cm", "price": 175, "stock": 1}, {"code": "P1650", "name": "Tungsten Micro Needle, 5.2cm, straight (Box10)", "price": 190, "stock": 1}, {"code": "P1651", "name": "Micro Needle 7.0cm straight", "price": 190, "stock": 1}, {"code": "150-346B", "name": "Duckbill, Blunt Dissector, CVD Left, 10mm", "price": 149, "stock": 1}, {"code": "110-523LB", "name": "Retractor, Britetrac, 1in x 6in, Blue Silicone", "price": 408, "stock": 1}, {"code": "110-522LB", "name": "Retractor, Britetrac, 1in x 3in, Blue Silicone", "price": 408, "stock": 1}, {"code": "190-304LB", "name": "Retractor, Converse, Delicate, Fiber Optic, Blue Storz", "price": 185, "stock": 3}, {"code": "200-513", "name": "Rongeur, Goksel, Preservation, 20cm", "price": 256, "stock": 1}, {"code": "200-515", "name": "Preservation Rhinoplasty: Cakir Lateral Handsaw", "price": 185, "stock": 1}, {"code": "200-516", "name": "Rasp, Tastan, Preservation Rhinoplasty, 7mm", "price": 185, "stock": 1}, {"code": "200-517", "name": "Preservation Rhinoplasty: Cakir 90", "price": 185, "stock": 1}, {"code": "200-521", "name": "Ferraz Straight saw, 20cm", "price": 81, "stock": 1}, {"code": "PAC-0162", "name": "Fat Emulsifier (1.2mm)", "price": 120, "stock": 1}, {"code": "PAC-0163", "name": "Fat Emulsifier (1.4mm)", "price": 120, "stock": 1}, {"code": "110-341", "name": "Talei Necklift Retractor Benetrator 2 with Light", "price": 525, "stock": 1}, {"code": "150-600", "name": "Mani 3mm x 13cm Needle Holder with Euro Handle", "price": 600, "stock": 1}, {"code": "110-100", "name": "Retractor, Facelift, Graduated Blade 16mm, Mani", "price": 185, "stock": 1}, {"code": "050-964", "name": "Trepsat Paddle Elevator, Non-Cutting, 22cm", "price": 235, "stock": 1}, {"code": "110-346", "name": "Talei Necklift Retractor XL Benetrator Magnum", "price": 525, "stock": 1}, {"code": "110-347", "name": "Talei Necklift Retractor Narrow Le Petit Benetrator", "price": 525, "stock": 1}, {"code": "289-501", "name": "Fenestrated Desmarres Nasal Retractor, 14cm chain", "price": 133, "stock": 1}, {"code": "MMSN\u04231451S", "name": "Auersvald-Nassif Hemostatic Net Suture 5-0 (Box 12)", "price": 88, "stock": 4}, {"code": "HOPKINS-SET", "name": "Hopkins Cartilage Dicing Set with Ceramic Blades", "price": 350, "stock": 1}];
 var orderItems = [];
@@ -388,11 +426,22 @@ function searchProduct() {
   for (var i = 0; i < catalog.length; i++) {
     if (catalog[i].code.toUpperCase() === code) { found = catalog[i]; break; }
   }
-  if (!found) { 
-    document.getElementById('search-result').innerHTML = '<div style="color:#e74c3c;padding:8px;font-size:13px;">&#10007; Product code not found</div>';
-    return; 
+  if (!found) {
+    var html = '<div style="background:#fff8e1;border:1.5px solid #c9a84c;border-radius:10px;padding:12px 14px;margin-top:6px;">';
+    html += '<div style="font-size:13px;font-weight:700;color:#0d1f4e;margin-bottom:8px;">&#10007; Product not found. Do you want to add it?</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">';
+    html += '<input id="new-code" style="height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;" placeholder="Code" readonly>';
+    html += '<input id="new-price" type="number" style="height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;" placeholder="Price EUR">';
+    html += '</div>';
+    html += '<input id="new-name" style="width:100%;height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;margin-bottom:8px;" placeholder="Product Name">';
+    html += '<div style="display:flex;gap:8px;">';
+    html += '<button onclick="addNewProduct()" style="flex:1;height:38px;background:#0d1f4e;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;-webkit-appearance:none;">Add as Future Order</button>';
+    html += '<button onclick="document.getElementById(\'search-result\').innerHTML=\'\'" style="height:38px;padding:0 14px;background:#fff;border:1.5px solid #c5d0e8;color:#6b7fa8;border-radius:8px;font-size:13px;cursor:pointer;-webkit-appearance:none;">Cancel</button>';
+    html += '</div></div>';
+    document.getElementById('search-result').innerHTML = html;
+    document.getElementById('new-code').value = code;
+    return;
   }
-  // Check if already in list
   for (var j = 0; j < orderItems.length; j++) {
     if (orderItems[j].code === found.code) {
       alert('Product already added. Change quantity below.');
@@ -401,6 +450,23 @@ function searchProduct() {
     }
   }
   orderItems.push({ code: found.code, name: found.name, price: found.price, stock: found.stock, qty: 1 });
+  document.getElementById('search-code').value = '';
+  document.getElementById('search-result').innerHTML = '';
+  renderOrderItems();
+}
+
+function addNewProduct() {
+  var code = document.getElementById('new-code').value.trim().toUpperCase();
+  var name = document.getElementById('new-name').value.trim();
+  var price = parseFloat(document.getElementById('new-price').value) || 0;
+  if (!name) { alert('Please enter product name'); return; }
+  if (!price) { alert('Please enter price'); return; }
+  catalog.push({ code: code, name: name, price: price, stock: 0 });
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', SHEET_URL2, true);
+  xhr.setRequestHeader('Content-Type', 'text/plain');
+  xhr.send(JSON.stringify({ type: 'add_product', code: code, name: name, price: price }));
+  orderItems.push({ code: code, name: name, price: price, stock: 0, qty: 1 });
   document.getElementById('search-code').value = '';
   document.getElementById('search-result').innerHTML = '';
   renderOrderItems();
@@ -483,37 +549,112 @@ function confirmOrder() {
   var ts = new Date().toLocaleString('en-GB');
   var doctorName = document.getElementById('name') ? document.getElementById('name').value.trim() : '';
   var doctorEmail = document.getElementById('email') ? document.getElementById('email').value.trim() : '';
+  var doctorPhone = document.getElementById('phone-prefix') ? document.getElementById('phone-prefix').value + ' ' + document.getElementById('phone-number').value.trim() : '';
+  var doctorCountry = document.getElementById('country-value') ? document.getElementById('country-value').value.trim() : '';
 
+  // Save in-stock order
   if (inStockItems.length > 0) {
-    var orderData = {
-      type: 'order',
-      timestamp: ts,
-      doctor: doctorName,
-      clinic: clinic,
-      vat: billing,
-      items: inStockItems.map(function(i){ return { code:i.code, name:i.name, qty:i.qty, eur:i.price, ron:parseFloat((i.price*RON_RATE).toFixed(0)), totalEur:i.price*i.qty, totalRon:parseFloat((i.price*RON_RATE*i.qty).toFixed(0)) }; })
+    var orderData = { type: 'order', timestamp: ts, doctor: doctorName, email: doctorEmail, phone: doctorPhone, country: doctorCountry, clinic: clinic, vat: billing,
+      items: inStockItems.map(function(i){ return { code: i.code, name: i.name, qty: i.qty, eur: i.price, ron: parseFloat((i.price*RON_RATE).toFixed(0)), totalEur: i.price*i.qty, totalRon: parseFloat((i.price*RON_RATE*i.qty).toFixed(0)), source: '' }; })
     };
     var xhr = new XMLHttpRequest();
     xhr.open('POST', SHEET_URL2, true);
     xhr.setRequestHeader('Content-Type', 'text/plain');
     xhr.send(JSON.stringify(orderData));
+
+    // Update stock
+    inStockItems.forEach(function(item) {
+      var stockData = { type: 'stock_update', code: item.code, qty: item.qty };
+      var xhr2 = new XMLHttpRequest();
+      xhr2.open('POST', SHEET_URL2, true);
+      xhr2.setRequestHeader('Content-Type', 'text/plain');
+      xhr2.send(JSON.stringify(stockData));
+      for (var i = 0; i < catalog.length; i++) {
+        if (catalog[i].code === item.code) { catalog[i].stock = Math.max(0, catalog[i].stock - item.qty); break; }
+      }
+    });
   }
 
+  // Save future order
   if (futureItems.length > 0) {
-    var futureData = {
-      type: 'future_order',
-      timestamp: ts,
-      doctor: doctorName,
-      email: doctorEmail,
-      items: futureItems.map(function(i){ return { code:i.code, name:i.name, qty:i.qty, eur:i.price, ron:parseFloat((i.price*RON_RATE).toFixed(0)) }; })
+    var futureData = { type: 'future_order', timestamp: ts, doctor: doctorName, email: doctorEmail, phone: doctorPhone, country: doctorCountry,
+      items: futureItems.map(function(i){ return { code: i.code, name: i.name, qty: i.qty, eur: i.price, ron: parseFloat((i.price*RON_RATE).toFixed(0)) }; })
     };
-    var xhr2 = new XMLHttpRequest();
-    xhr2.open('POST', SHEET_URL2, true);
-    xhr2.setRequestHeader('Content-Type', 'text/plain');
-    xhr2.send(JSON.stringify(futureData));
+    var xhr3 = new XMLHttpRequest();
+    xhr3.open('POST', SHEET_URL2, true);
+    xhr3.setRequestHeader('Content-Type', 'text/plain');
+    xhr3.send(JSON.stringify(futureData));
+  }
+
+  // Store for summary and email
+  window._lastOrder = { inStock: inStockItems, future: futureItems, doctor: doctorName, email: doctorEmail };
+
+  // Build summary
+  document.getElementById('summary-doctor').textContent = doctorName + ' | ' + clinic;
+
+  // In-stock summary
+  if (inStockItems.length > 0) {
+    document.getElementById('summary-instock-wrap').style.display = 'block';
+    var instockHtml = '';
+    var totEur = 0, totRon = 0;
+    inStockItems.forEach(function(i) {
+      instockHtml += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e0f0e8;font-size:12px;">';
+      instockHtml += '<span style="color:#0d1f4e;flex:1;">' + i.code + ' — ' + i.name + ' (x' + i.qty + ')</span>';
+      instockHtml += '<span style="font-weight:700;color:#0d1f4e;white-space:nowrap;margin-left:8px;">' + (i.price*i.qty) + ' EUR</span>';
+      instockHtml += '</div>';
+      totEur += i.price * i.qty;
+      totRon += i.price * RON_RATE * i.qty;
+    });
+    document.getElementById('summary-instock').innerHTML = instockHtml;
+    document.getElementById('summary-total-eur').textContent = totEur.toFixed(0);
+    document.getElementById('summary-total-ron').textContent = totRon.toFixed(0);
+  }
+
+  // Future summary
+  if (futureItems.length > 0) {
+    document.getElementById('summary-future-wrap').style.display = 'block';
+    var futureHtml = '';
+    var futEur = 0, futRon = 0;
+    futureItems.forEach(function(i) {
+      futureHtml += '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #fde8cc;font-size:12px;">';
+      futureHtml += '<span style="color:#0d1f4e;flex:1;">' + i.code + ' — ' + i.name + ' (x' + i.qty + ')</span>';
+      futureHtml += '<span style="font-weight:700;color:#0d1f4e;white-space:nowrap;margin-left:8px;">' + (i.price*i.qty) + ' EUR</span>';
+      futureHtml += '</div>';
+      futEur += i.price * i.qty;
+      futRon += i.price * RON_RATE * i.qty;
+    });
+    document.getElementById('summary-future').innerHTML = futureHtml;
+    document.getElementById('summary-future-eur').textContent = futEur.toFixed(0);
+    document.getElementById('summary-future-ron').textContent = futRon.toFixed(0);
+    document.getElementById('close-summary-btn').style.display = 'none';
+  } else {
+    document.getElementById('close-summary-btn').style.display = 'block';
   }
 
   document.getElementById('order-success').style.display = 'flex';
+}
+
+function sendFutureEmail() {
+  var order = window._lastOrder;
+  if (!order || !order.future || order.future.length === 0) { closeSummary(); return; }
+  var nl = '%0D%0A';
+  var subject = encodeURIComponent('Your Future Order - Global Med Care');
+  var body = 'Dear ' + encodeURIComponent(order.doctor) + ',' + nl;
+  body += 'We confirm your order of the following products:' + nl + nl;
+  order.future.forEach(function(i) {
+    body += encodeURIComponent(i.code + ' | ' + i.name + ' | Qty: ' + i.qty + ' | ' + (i.price * i.qty) + ' EUR') + nl;
+  });
+  body += nl + 'We will contact you as soon as these products are available back on stock.' + nl + nl + 'Kind regards,' + nl + 'Global Med Care Team';
+  window.location.href = 'mailto:' + order.email + '?subject=' + subject + '&body=' + body;
+  closeSummary();
+}
+
+function closeSummary() {
+  document.getElementById('order-success').style.display = 'none';
+  document.getElementById('summary-instock-wrap').style.display = 'none';
+  document.getElementById('summary-future-wrap').style.display = 'none';
+  showStep1();
+  orderItems = [];
 }
 
 function sendFutureOrder() {
