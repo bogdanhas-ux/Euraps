@@ -126,7 +126,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
         <div class="gdpr-check"><svg viewBox="0 0 15 15" fill="none"><polyline points="2,8 6,12 13,3" stroke="#c9a84c" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="gdpr-text"><strong>I agree to GDPR data processing.</strong> Data stored solely by GlobalMedCare Surgical for commercial communication. Not shared with third parties.</div>
       </div>
-      <button class="btn-submit" onclick="submitForm()">Save Contact &#8594;</button>
+      <button class="btn-submit" onclick="submitForm()">Save &amp; Send Info &#8594;</button>
     </div>
   </div>
 
@@ -222,7 +222,19 @@ function submitForm(){
   if(!name){alert('Please enter Full Name');return;}
   if(!country){alert('Please select Country');return;}
   if(!phone){alert('Please enter Phone');return;}
-  if(!email||email.indexOf('@')<0){alert('Please enter valid Email');return;}var contact={name:document.getElementById('name').value.trim(),specialty:document.getElementById('specialty').value.trim(),country:document.getElementById('country-value').value.trim(),phone:document.getElementById('phone-prefix').value+' '+document.getElementById('phone-number').value.trim(),email:document.getElementById('email').value.trim(),gdpr:'Yes',timestamp:new Date().toLocaleString('en-GB')};contacts.push(contact);realCount++;if(document.getElementById('counter'))document.getElementById('counter').textContent=FAKE_OFFSET+realCount;document.getElementById('success-name').textContent=contact.name+' saved!';sendToSheet(contact);document.getElementById('success-overlay').classList.add('show');startFireworks();}
+  if(!email||email.indexOf('@')<0){alert('Please enter valid Email');return;}
+  var contact={name:name,specialty:document.getElementById('specialty').value.trim(),country:country,phone:document.getElementById('phone-prefix').value+' '+phone,email:email,gdpr:'Yes',timestamp:new Date().toLocaleString('en-GB')};
+  contacts.push(contact);realCount++;
+  if(document.getElementById('counter'))document.getElementById('counter').textContent=FAKE_OFFSET+realCount;
+  sendToSheet(contact);
+  var nl='%0D%0A';
+  var subject=encodeURIComponent('Global Med Care Shop - Marina Medical Instruments');
+  var body='Dear '+encodeURIComponent(name)+','+nl+nl+'We are pleased to connect with you! We would like to introduce our new website, where you can purchase Marina Medical instruments with delivery across Europe.'+nl+nl+'As you already know Global Med Care is the exclusive commercial partner of Marina Medical in Europe, and through our platform you can quickly and easily order the available products:'+nl+nl+'https://globalmed-shop.com/'+nl+nl+'Please feel free to contact us for any further information.'+nl+nl+'Kind regards,'+nl+'Global Med Care Team';
+  window.location.href='mailto:'+email+'?subject='+subject+'&body='+body;
+  document.getElementById('success-name').textContent=name+' saved!';
+  document.getElementById('success-overlay').classList.add('show');
+  startFireworks();
+}
 function nextContact(){stopFireworks();document.getElementById('success-overlay').classList.remove('show');['name','specialty','phone-number','email'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('country-input').value='';document.getElementById('country-value').value='';selectedCountry=null;}
 
 </script>
