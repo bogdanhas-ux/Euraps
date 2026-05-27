@@ -365,10 +365,13 @@ function showErr(f,e){document.getElementById(f).classList.add('error');document
 function clearErr(f,e){document.getElementById(f).classList.remove('error');document.getElementById(e).style.display='none';}
 function validate(){var ok=true;var name=document.getElementById('name').value.trim();if(!name){showErr('name','name-err');ok=false;}else{clearErr('name','name-err');}var country=document.getElementById('country-value').value.trim();if(!country){showErr('country-input','country-err');ok=false;}else{clearErr('country-input','country-err');}var phone=document.getElementById('phone-number').value.trim();if(!phone){showErr('phone-number','phone-err');ok=false;}else{clearErr('phone-number','phone-err');}var email=document.getElementById('email').value.trim();if(!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)){showErr('email','email-err');ok=false;}else{clearErr('email','email-err');}return ok;}
 function sendToSheets(data, url) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', (url || SHEET_URL), true);
-  xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
-  xhr.send(JSON.stringify(data));
+  var target = url || SHEET_URL;
+  fetch(target, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(data)
+  });
 }
 function sendToSheet(contact) {
   contact.type = 'contact';
