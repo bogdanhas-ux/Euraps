@@ -543,18 +543,18 @@ function searchProduct() {
   var code = document.getElementById('search-code').value.trim().toUpperCase();
   if (!code) { alert('Please enter a product code'); return; }
   document.getElementById('search-result').innerHTML = '<div style="color:#6b7fa8;padding:8px;font-size:13px;">Searching...</div>';
+
   var url = SHEET_URL + '?type=get_stock&code=' + encodeURIComponent(code);
-  fetch(url)
+  
+  fetch(url, {mode:'cors'})
     .then(function(r){ return r.json(); })
     .then(function(data) {
       document.getElementById('search-result').innerHTML = '';
-      if (!data.found) {
-        showAddForm(code);
-        return;
-      }
-      addToOrder(data.code, data.name, data.price, data.stock);
+      if (!data.found) { showAddForm(code); return; }
+      addToOrder(data.code, data.name, Number(data.price), Number(data.stock));
     })
     .catch(function() {
+      // Fallback to local catalog
       document.getElementById('search-result').innerHTML = '';
       var found = null;
       for (var i = 0; i < catalog.length; i++) {
