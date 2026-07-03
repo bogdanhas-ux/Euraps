@@ -84,6 +84,14 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
 .country-modal-list { overflow-y:scroll; -webkit-overflow-scrolling:touch; flex:1; }
 
 
+
+.search-dropdown { display:none; position:absolute; left:0; right:0; top:48px; background:#fff; border:1.5px solid #2d6a4f; border-radius:10px; max-height:250px; overflow-y:auto; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,0.15); }
+.search-dropdown.open { display:block; }
+.search-item { padding:10px 14px; font-size:13px; cursor:pointer; border-bottom:1px solid #f0f4ff; display:flex; flex-direction:column; }
+.search-item:hover, .search-item.selected { background:#f0faf5; }
+.search-item-code { font-weight:700; color:#1a472a; font-size:12px; }
+.search-item-name { color:#6b7fa8; font-size:11px; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.search-item-price { color:#c0392b; font-weight:700; font-size:12px; margin-top:2px; }
 </style>
 </head>
 <body>
@@ -204,10 +212,11 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--bg); fon
       </div>
 
       <!-- Search -->
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <input type="text" id="search-code" style="flex:1;height:42px;border:1.5px solid #c5d0e8;border-radius:10px;padding:0 12px;font-size:14px;outline:none;-webkit-appearance:none;text-transform:uppercase;" placeholder="Enter product code..." onkeydown="if(event.key==='Enter')searchProduct()">
+      <div style="display:flex;gap:8px;margin-bottom:10px;position:relative;">
+        <input type="text" id="search-code" style="flex:1;height:42px;border:1.5px solid #c5d0e8;border-radius:10px;padding:0 12px;font-size:14px;outline:none;-webkit-appearance:none;" placeholder="Type code or name..." oninput="liveSearch(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();selectFirstResult();}">
         <button onclick="searchProduct()" style="height:42px;padding:0 20px;background:#0d1f4e;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;-webkit-appearance:none;">Search</button>
       </div>
+      <div id="search-dropdown" class="search-dropdown"></div>
       <div id="search-result"></div>
 
       <!-- Order items -->
@@ -864,6 +873,59 @@ function selectCountryFromModal(name, prefix, flag) {
   closeCountryModal();
   checkOrderBtn();
 }
+
+
+var searchSelectedIdx = -1;
+
+function liveSearch(val) {
+  val = val.trim();
+  var dd = document.getElementById('search-dropdown');
+  if (val.length < 2) { dd.classList.remove('open'); dd.innerHTML = ''; searchSelectedIdx = -1; return; }
+  var q = val.toUpperCase();
+  var matches = catalog.filter(function(p) {
+    return p.code.toUpperCase().indexOf(q) >= 0 || p.name.toUpperCase().indexOf(q) >= 0;
+  }).slice(0, 20);
+  if (matches.length === 0) { dd.classList.remove('open'); dd.innerHTML = ''; return; }
+  var h = '';
+  matches.forEach(function(p, i) {
+    var inStock = p.stock > 0;
+    h += '<div class="search-item" onclick="pickProduct(' + catalog.indexOf(p) + ')" data-idx="' + i + '">';
+    h += '<span class="search-item-code">' + p.code + (inStock ? ' ✓' : ' — OUT OF STOCK') + '</span>';
+    h += '<span class="search-item-name">' + p.name + '</span>';
+    h += '<span class="search-item-price">' + p.price + ' EUR | ' + Math.round(p.price * RON_RATE) + ' RON</span>';
+    h += '</div>';
+  });
+  dd.innerHTML = h;
+  dd.classList.add('open');
+  searchSelectedIdx = -1;
+}
+
+function pickProduct(catalogIdx) {
+  var p = catalog[catalogIdx];
+  if (!p) return;
+  document.getElementById('search-dropdown').classList.remove('open');
+  document.getElementById('search-code').value = '';
+  document.getElementById('search-result').innerHTML = '';
+  for (var j = 0; j < orderItems.length; j++) {
+    if (orderItems[j].code === p.code) { alert('Product already added.'); return; }
+  }
+  orderItems.push({ code: p.code, name: p.name, price: p.price, stock: p.stock, qty: 1 });
+  renderOrderItems();
+}
+
+function selectFirstResult() {
+  var dd = document.getElementById('search-dropdown');
+  var first = dd.querySelector('.search-item');
+  if (first) { first.click(); }
+  else { searchProduct(); }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#search-code') && !e.target.closest('#search-dropdown')) {
+    var dd = document.getElementById('search-dropdown');
+    if (dd) dd.classList.remove('open');
+  }
+});
 
 </script>
 
