@@ -542,22 +542,36 @@ function showStep1() {
 function searchProduct() {
   var code = document.getElementById('search-code').value.trim().toUpperCase();
   if (!code) { alert('Please enter a product code'); return; }
-  document.getElementById('search-result').innerHTML = '';
+  document.getElementById('search-result').innerHTML = '<div style="color:#6b7fa8;padding:8px;font-size:13px;">Searching...</div>';
+
+  var url = SHEET_URL + '?type=get_stock&code=' + encodeURIComponent(code);
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.withCredentials = false;
+  xhr.onload = function() {
+    document.getElementById('search-result').innerHTML = '';
+    try {
+      var data = JSON.parse(xhr.responseText);
+      if (!data.found) { showAddForm(code); return; }
+      addToOrder(data.code, data.name, Number(data.price), Number(data.stock));
+    } catch(e) {
+      searchLocal(code);
+    }
+  };
+  xhr.onerror = function() {
+    document.getElementById('search-result').innerHTML = '';
+    searchLocal(code);
+  };
+  xhr.send();
+}
+
+function searchLocal(code) {
   var found = null;
   for (var i = 0; i < catalog.length; i++) {
     if (catalog[i].code.toUpperCase() === code) { found = catalog[i]; break; }
   }
   if (!found) { showAddForm(code); return; }
-  for (var j = 0; j < orderItems.length; j++) {
-    if (orderItems[j].code === found.code) {
-      alert('Product already added. Change quantity below.');
-      document.getElementById('search-code').value = '';
-      return;
-    }
-  }
-  orderItems.push({ code: found.code, name: found.name, price: found.price, stock: found.stock, qty: 1 });
-  document.getElementById('search-code').value = '';
-  renderOrderItems();
+  addToOrder(found.code, found.name, found.price, found.stock);
 }
 
 function addToOrder(code, name, price, stock) {
