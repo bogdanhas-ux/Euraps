@@ -336,27 +336,110 @@ function startFireworks(){resizeCanvas();particles=[];for(var i=0;i<5;i++){(func
 function stopFireworks(){clearInterval(burstInterval);cancelAnimationFrame(animFrame);ctx.clearRect(0,0,canvas.width,canvas.height);particles=[];}
 
 var COUNTRIES=[
-  {name:'Albania',flag:'\uD83C\uDDE6\uD83C\uDDF1',prefix:'+355'},{name:'Austria',flag:'\uD83C\uDDE6\uD83C\uDDF9',prefix:'+43'},
-  {name:'Belgium',flag:'\uD83C\uDDE7\uD83C\uDDEA',prefix:'+32'},{name:'Bosnia & Herzegovina',flag:'\uD83C\uDDE7\uD83C\uDDE6',prefix:'+387'},
-  {name:'Bulgaria',flag:'\uD83C\uDDE7\uD83C\uDDEC',prefix:'+359'},{name:'Croatia',flag:'\uD83C\uDDED\uD83C\uDDF7',prefix:'+385'},
-  {name:'Cyprus',flag:'\uD83C\uDDE8\uD83C\uDDFE',prefix:'+357'},{name:'Czech Republic',flag:'\uD83C\uDDE8\uD83C\uDDFF',prefix:'+420'},
-  {name:'Denmark',flag:'\uD83C\uDDE9\uD83C\uDDF0',prefix:'+45'},{name:'Estonia',flag:'\uD83C\uDDEA\uD83C\uDDEA',prefix:'+372'},
-  {name:'Finland',flag:'\uD83C\uDDEB\uD83C\uDDEE',prefix:'+358'},{name:'France',flag:'\uD83C\uDDEB\uD83C\uDDF7',prefix:'+33'},
-  {name:'Germany',flag:'\uD83C\uDDE9\uD83C\uDDEA',prefix:'+49'},{name:'Greece',flag:'\uD83C\uDDEC\uD83C\uDDF7',prefix:'+30'},
-  {name:'Hungary',flag:'\uD83C\uDDED\uD83C\uDDFA',prefix:'+36'},{name:'Iceland',flag:'\uD83C\uDDEE\uD83C\uDDF8',prefix:'+354'},
-  {name:'Ireland',flag:'\uD83C\uDDEE\uD83C\uDDEA',prefix:'+353'},{name:'Italy',flag:'\uD83C\uDDEE\uD83C\uDDF9',prefix:'+39'},
-  {name:'Latvia',flag:'\uD83C\uDDF1\uD83C\uDDFB',prefix:'+371'},{name:'Liechtenstein',flag:'\uD83C\uDDF1\uD83C\uDDEE',prefix:'+423'},
-  {name:'Lithuania',flag:'\uD83C\uDDF1\uD83C\uDDF9',prefix:'+370'},{name:'Luxembourg',flag:'\uD83C\uDDF1\uD83C\uDDFA',prefix:'+352'},
-  {name:'Malta',flag:'\uD83C\uDDF2\uD83C\uDDF9',prefix:'+356'},{name:'Moldova',flag:'\uD83C\uDDF2\uD83C\uDDE9',prefix:'+373'},
-  {name:'Montenegro',flag:'\uD83C\uDDF2\uD83C\uDDEA',prefix:'+382'},{name:'Netherlands',flag:'\uD83C\uDDF3\uD83C\uDDF1',prefix:'+31'},
-  {name:'North Macedonia',flag:'\uD83C\uDDF2\uD83C\uDDF0',prefix:'+389'},{name:'Norway',flag:'\uD83C\uDDF3\uD83C\uDDF4',prefix:'+47'},
-  {name:'Poland',flag:'\uD83C\uDDF5\uD83C\uDDF1',prefix:'+48'},{name:'Portugal',flag:'\uD83C\uDDF5\uD83C\uDDF9',prefix:'+351'},
-  {name:'Romania',flag:'\uD83C\uDDF7\uD83C\uDDF4',prefix:'+40'},{name:'Serbia',flag:'\uD83C\uDDF7\uD83C\uDDF8',prefix:'+381'},
-  {name:'Slovakia',flag:'\uD83C\uDDF8\uD83C\uDDF0',prefix:'+421'},{name:'Slovenia',flag:'\uD83C\uDDF8\uD83C\uDDEE',prefix:'+386'},
-  {name:'Spain',flag:'\uD83C\uDDEA\uD83C\uDDF8',prefix:'+34'},{name:'Sweden',flag:'\uD83C\uDDF8\uD83C\uDDEA',prefix:'+46'},
-  {name:'Switzerland',flag:'\uD83C\uDDE8\uD83C\uDDED',prefix:'+41'},{name:'Turkey',flag:'\uD83C\uDDF9\uD83C\uDDF7',prefix:'+90'},
-  {name:'Ukraine',flag:'\uD83C\uDDFA\uD83C\uDDE6',prefix:'+380'},{name:'United Kingdom',flag:'\uD83C\uDDEC\uD83C\uDDE7',prefix:'+44'},
-  {name:'Other',flag:'\uD83C\uDF0D',prefix:''}
+{name:'Afghanistan',flag:'AF',prefix:'+93'},
+{name:'Albania',flag:'AL',prefix:'+355'},
+{name:'Algeria',flag:'DZ',prefix:'+213'},
+{name:'Argentina',flag:'AR',prefix:'+54'},
+{name:'Armenia',flag:'AM',prefix:'+374'},
+{name:'Australia',flag:'AU',prefix:'+61'},
+{name:'Austria',flag:'AT',prefix:'+43'},
+{name:'Azerbaijan',flag:'AZ',prefix:'+994'},
+{name:'Bahrain',flag:'BH',prefix:'+973'},
+{name:'Bangladesh',flag:'BD',prefix:'+880'},
+{name:'Belarus',flag:'BY',prefix:'+375'},
+{name:'Belgium',flag:'BE',prefix:'+32'},
+{name:'Bolivia',flag:'BO',prefix:'+591'},
+{name:'Bosnia & Herzegovina',flag:'BA',prefix:'+387'},
+{name:'Brazil',flag:'BR',prefix:'+55'},
+{name:'Bulgaria',flag:'BG',prefix:'+359'},
+{name:'Cambodia',flag:'KH',prefix:'+855'},
+{name:'Canada',flag:'CA',prefix:'+1'},
+{name:'Chile',flag:'CL',prefix:'+56'},
+{name:'China',flag:'CN',prefix:'+86'},
+{name:'Colombia',flag:'CO',prefix:'+57'},
+{name:'Costa Rica',flag:'CR',prefix:'+506'},
+{name:'Croatia',flag:'HR',prefix:'+385'},
+{name:'Cuba',flag:'CU',prefix:'+53'},
+{name:'Cyprus',flag:'CY',prefix:'+357'},
+{name:'Czech Republic',flag:'CZ',prefix:'+420'},
+{name:'Denmark',flag:'DK',prefix:'+45'},
+{name:'Ecuador',flag:'EC',prefix:'+593'},
+{name:'Egypt',flag:'EG',prefix:'+20'},
+{name:'Estonia',flag:'EE',prefix:'+372'},
+{name:'Ethiopia',flag:'ET',prefix:'+251'},
+{name:'Finland',flag:'FI',prefix:'+358'},
+{name:'France',flag:'FR',prefix:'+33'},
+{name:'Georgia',flag:'GE',prefix:'+995'},
+{name:'Germany',flag:'DE',prefix:'+49'},
+{name:'Ghana',flag:'GH',prefix:'+233'},
+{name:'Greece',flag:'GR',prefix:'+30'},
+{name:'Guatemala',flag:'GT',prefix:'+502'},
+{name:'Hungary',flag:'HU',prefix:'+36'},
+{name:'Iceland',flag:'IS',prefix:'+354'},
+{name:'India',flag:'IN',prefix:'+91'},
+{name:'Indonesia',flag:'ID',prefix:'+62'},
+{name:'Iran',flag:'IR',prefix:'+98'},
+{name:'Iraq',flag:'IQ',prefix:'+964'},
+{name:'Ireland',flag:'IE',prefix:'+353'},
+{name:'Israel',flag:'IL',prefix:'+972'},
+{name:'Italy',flag:'IT',prefix:'+39'},
+{name:'Japan',flag:'JP',prefix:'+81'},
+{name:'Jordan',flag:'JO',prefix:'+962'},
+{name:'Kazakhstan',flag:'KZ',prefix:'+7'},
+{name:'Kenya',flag:'KE',prefix:'+254'},
+{name:'Kuwait',flag:'KW',prefix:'+965'},
+{name:'Latvia',flag:'LV',prefix:'+371'},
+{name:'Lebanon',flag:'LB',prefix:'+961'},
+{name:'Libya',flag:'LY',prefix:'+218'},
+{name:'Liechtenstein',flag:'LI',prefix:'+423'},
+{name:'Lithuania',flag:'LT',prefix:'+370'},
+{name:'Luxembourg',flag:'LU',prefix:'+352'},
+{name:'Malaysia',flag:'MY',prefix:'+60'},
+{name:'Malta',flag:'MT',prefix:'+356'},
+{name:'Mexico',flag:'MX',prefix:'+52'},
+{name:'Moldova',flag:'MD',prefix:'+373'},
+{name:'Montenegro',flag:'ME',prefix:'+382'},
+{name:'Morocco',flag:'MA',prefix:'+212'},
+{name:'Netherlands',flag:'NL',prefix:'+31'},
+{name:'New Zealand',flag:'NZ',prefix:'+64'},
+{name:'Nigeria',flag:'NG',prefix:'+234'},
+{name:'North Macedonia',flag:'MK',prefix:'+389'},
+{name:'Norway',flag:'NO',prefix:'+47'},
+{name:'Oman',flag:'OM',prefix:'+968'},
+{name:'Pakistan',flag:'PK',prefix:'+92'},
+{name:'Panama',flag:'PA',prefix:'+507'},
+{name:'Peru',flag:'PE',prefix:'+51'},
+{name:'Philippines',flag:'PH',prefix:'+63'},
+{name:'Poland',flag:'PL',prefix:'+48'},
+{name:'Portugal',flag:'PT',prefix:'+351'},
+{name:'Qatar',flag:'QA',prefix:'+974'},
+{name:'Romania',flag:'RO',prefix:'+40'},
+{name:'Russia',flag:'RU',prefix:'+7'},
+{name:'Saudi Arabia',flag:'SA',prefix:'+966'},
+{name:'Serbia',flag:'RS',prefix:'+381'},
+{name:'Singapore',flag:'SG',prefix:'+65'},
+{name:'Slovakia',flag:'SK',prefix:'+421'},
+{name:'Slovenia',flag:'SI',prefix:'+386'},
+{name:'South Africa',flag:'ZA',prefix:'+27'},
+{name:'South Korea',flag:'KR',prefix:'+82'},
+{name:'Spain',flag:'ES',prefix:'+34'},
+{name:'Sweden',flag:'SE',prefix:'+46'},
+{name:'Switzerland',flag:'CH',prefix:'+41'},
+{name:'Syria',flag:'SY',prefix:'+963'},
+{name:'Taiwan',flag:'TW',prefix:'+886'},
+{name:'Thailand',flag:'TH',prefix:'+66'},
+{name:'Tunisia',flag:'TN',prefix:'+216'},
+{name:'Turkey',flag:'TR',prefix:'+90'},
+{name:'Ukraine',flag:'UA',prefix:'+380'},
+{name:'United Arab Emirates',flag:'AE',prefix:'+971'},
+{name:'United Kingdom',flag:'GB',prefix:'+44'},
+{name:'United States',flag:'US',prefix:'+1'},
+{name:'Uruguay',flag:'UY',prefix:'+598'},
+{name:'Uzbekistan',flag:'UZ',prefix:'+998'},
+{name:'Venezuela',flag:'VE',prefix:'+58'},
+{name:'Vietnam',flag:'VN',prefix:'+84'},
+{name:'Yemen',flag:'YE',prefix:'+967'},
+{name:'Other',flag:'--',prefix:''}
 ];
 
 var contacts=[],selectedCountry=null;
@@ -459,37 +542,56 @@ function showStep1() {
 function searchProduct() {
   var code = document.getElementById('search-code').value.trim().toUpperCase();
   if (!code) { alert('Please enter a product code'); return; }
-  var found = null;
-  for (var i = 0; i < catalog.length; i++) {
-    if (catalog[i].code.toUpperCase() === code) { found = catalog[i]; break; }
-  }
-  if (!found) {
-    var html = '<div style="background:#fff8e1;border:1.5px solid #c9a84c;border-radius:10px;padding:12px 14px;margin-top:6px;">';
-    html += '<div style="font-size:13px;font-weight:700;color:#0d1f4e;margin-bottom:8px;">&#10007; Product not found. Do you want to add it?</div>';
-    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">';
-    html += '<input id="new-code" style="height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;" placeholder="Code" readonly>';
-    html += '<input id="new-price" type="number" style="height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;" placeholder="Price EUR">';
-    html += '</div>';
-    html += '<input id="new-name" style="width:100%;height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;margin-bottom:8px;" placeholder="Product Name">';
-    html += '<div style="display:flex;gap:8px;">';
-    html += '<button onclick="addNewProduct()" style="flex:1;height:38px;background:#0d1f4e;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;-webkit-appearance:none;">Add as Future Order</button>';
-    html += '<button onclick="document.getElementById(\'search-result\').innerHTML=\'\'" style="height:38px;padding:0 14px;background:#fff;border:1.5px solid #c5d0e8;color:#6b7fa8;border-radius:8px;font-size:13px;cursor:pointer;-webkit-appearance:none;">Cancel</button>';
-    html += '</div></div>';
-    document.getElementById('search-result').innerHTML = html;
-    document.getElementById('new-code').value = code;
-    return;
-  }
+  document.getElementById('search-result').innerHTML = '<div style="color:#6b7fa8;padding:8px;font-size:13px;">Searching...</div>';
+  var url = SHEET_URL + '?type=get_stock&code=' + encodeURIComponent(code);
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      document.getElementById('search-result').innerHTML = '';
+      if (!data.found) {
+        showAddForm(code);
+        return;
+      }
+      addToOrder(data.code, data.name, data.price, data.stock);
+    })
+    .catch(function() {
+      document.getElementById('search-result').innerHTML = '';
+      var found = null;
+      for (var i = 0; i < catalog.length; i++) {
+        if (catalog[i].code.toUpperCase() === code) { found = catalog[i]; break; }
+      }
+      if (!found) { showAddForm(code); return; }
+      addToOrder(found.code, found.name, found.price, found.stock);
+    });
+}
+
+function addToOrder(code, name, price, stock) {
   for (var j = 0; j < orderItems.length; j++) {
-    if (orderItems[j].code === found.code) {
-      alert('Product already added. Change quantity below.');
+    if (orderItems[j].code === code) {
+      alert('Product already added.');
       document.getElementById('search-code').value = '';
       return;
     }
   }
-  orderItems.push({ code: found.code, name: found.name, price: found.price, stock: found.stock, qty: 1 });
+  orderItems.push({ code: code, name: name, price: price, stock: stock, qty: 1 });
   document.getElementById('search-code').value = '';
-  document.getElementById('search-result').innerHTML = '';
   renderOrderItems();
+}
+
+function showAddForm(code) {
+  var h = '<div style="background:#fff8e1;border:1.5px solid #c9a84c;border-radius:10px;padding:12px 14px;margin-top:6px;">';
+  h += '<div style="font-size:13px;font-weight:700;color:#0d1f4e;margin-bottom:8px;">Product not found. Add it?</div>';
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">';
+  h += '<input id="new-code" style="height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;" readonly>';
+  h += '<input id="new-price" type="number" style="height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;" placeholder="Price EUR">';
+  h += '</div>';
+  h += '<input id="new-name" style="width:100%;height:38px;border:1.5px solid #c5d0e8;border-radius:8px;padding:0 10px;font-size:13px;outline:none;margin-bottom:8px;" placeholder="Product Name">';
+  h += '<div style="display:flex;gap:8px;">';
+  h += '<button onclick="addNewProduct()" style="flex:1;height:38px;background:#0d1f4e;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Add as Future Order</button>';
+  h += '<button onclick="document.getElementById(&quot;search-result&quot;).innerHTML=&quot;&quot;" style="height:38px;padding:0 14px;background:#fff;border:1.5px solid #c5d0e8;color:#6b7fa8;border-radius:8px;font-size:13px;cursor:pointer;">Cancel</button>';
+  h += '</div></div>';
+  document.getElementById('search-result').innerHTML = h;
+  document.getElementById('new-code').value = code;
 }
 
 function addNewProduct() {
